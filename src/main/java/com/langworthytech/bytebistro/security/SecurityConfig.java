@@ -62,12 +62,7 @@ public class SecurityConfig {
                         .anyRequest().authenticated())
                 .oauth2ResourceServer(oauth2 -> {
                             oauth2.authenticationManagerResolver(authenticationManagerResolver);
-//                            oauth2.jwt(jwtConfigurer ->
-//                                    jwtConfigurer.jwtAuthenticationConverter(customJwtAuthenticationConverter()));
-
-                        }
-
-                );
+                        });
         return httpSecurity.build();
     }
 
@@ -97,13 +92,10 @@ public class SecurityConfig {
         return converter;
     }
 
-//    private JwtIssuerAuthenticationManagerResolver authenticationManagerResolver() {
-//        return JwtIssuerAuthenticationManagerResolver.fromTrustedIssuers(trustedIssuerRepository.findAllIssuers());
-//    }
-
     private void addManager(Map<String, AuthenticationManager> authenticationManagers, String issuer) {
         log.info("Issuer added to authentication manager: {}", issuer);
         JwtAuthenticationProvider authenticationProvider = new JwtAuthenticationProvider(JwtDecoders.fromIssuerLocation(issuer));
+        authenticationProvider.setJwtAuthenticationConverter(customJwtAuthenticationConverter());
         authenticationManagers.put(issuer, authenticationProvider::authenticate);
     }
 

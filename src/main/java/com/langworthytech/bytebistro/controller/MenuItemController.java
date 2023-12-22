@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
@@ -50,7 +51,8 @@ public class MenuItemController {
         );
     }
 
-    @PostMapping("")
+    @PostMapping
+    @PreAuthorize("hasAuthority('SCOPE_kitchen.admin') || hasRole('create-menu')")
 //    @PostAuthorize("returnObject.username = authentication.token.subject")
     public ResponseEntity<HttpStatus> createMenuItem(@AuthenticationPrincipal Jwt token, @RequestBody MenuItem menuItem) {
 

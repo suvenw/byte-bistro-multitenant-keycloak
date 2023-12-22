@@ -1,12 +1,14 @@
 package com.langworthytech.bytebistro.controller;
 
 import com.langworthytech.bytebistro.model.MenuItem;
+import com.langworthytech.bytebistro.repository.MenuItemRepository;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
 import java.util.List;
@@ -14,6 +16,12 @@ import java.util.List;
 @RestController
 @RequestMapping("/menu")
 public class MenuItemController {
+
+    private final MenuItemRepository menuItemRepository;
+
+    public MenuItemController(MenuItemRepository menuItemRepository) {
+        this.menuItemRepository = menuItemRepository;
+    }
 
     @GetMapping("/admin")
     public List<MenuItem> getAdminMenuItems() {
@@ -42,8 +50,16 @@ public class MenuItemController {
         );
     }
 
-//    @PostMapping("/admin")
-//    public ResponseEntity<HttpStatus> createMenuItem(@RequestMapping MenuItem menuItem) {
-//
-//    }
+    @PostMapping("")
+//    @PostAuthorize("returnObject.username = authentication.token.subject")
+    public ResponseEntity<HttpStatus> createMenuItem(@AuthenticationPrincipal Jwt token, @RequestBody MenuItem menuItem) {
+
+        System.out.println("Subject: " + token.getSubject());
+        System.out.println("Claims: " + token.getClaims().toString());
+        System.out.println("Issuer: " + token.getIssuer());
+        System.out.println("Id: " + token.getId());
+
+        menuItemRepository.save(menuItem);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
 }

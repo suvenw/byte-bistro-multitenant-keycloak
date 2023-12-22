@@ -13,9 +13,9 @@ public class TrustedIssuerRepository {
 
     public TrustedIssuerRepository() {
         issuers = new HashMap<>(3);
-        issuers.put("karens_kitchen", "http://localhost:8080/realms/karens-kitchen");
-        issuers.put("joes_grub_hub", "http://localhost:8080/realms/joes-grub-hub");
-        issuers.put("code_and_coffee", "http://localhost:8080/realms/code-and-coffee");
+        issuers.put("http://localhost:8080/realms/karens-kitchen", "http://localhost:8080/realms/karens-kitchen");
+        issuers.put("http://localhost:8080/realms/joes-grub-hub", "http://localhost:8080/realms/joes-grub-hub");
+        issuers.put("http://localhost:8080/realms/code-and-coffee", "http://localhost:8080/realms/code-and-coffee");
     }
 
     public Collection<String> findAllIssuers() {

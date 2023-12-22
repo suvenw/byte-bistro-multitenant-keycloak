@@ -26,6 +26,6 @@ spring:
     maxPoolSize: 10
 server:
   port: 8090
-multitenancy:
-  http:
-    header-name: X-TenantId
+logging:
+  level:
+    org.springframework.security: TRACE

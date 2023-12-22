@@ -1,6 +1,7 @@
 package com.langworthytech.bytebistro.model;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.TenantId;
 
 import java.util.Objects;
 
@@ -11,6 +12,9 @@ public class MenuItem {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
+
+    @TenantId
+    private String tenantId;
 
     private String name;
 

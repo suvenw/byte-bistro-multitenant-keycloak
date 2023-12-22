@@ -1,5 +1,7 @@
 package com.langworthytech.bytebistro.security;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -11,6 +13,8 @@ import java.util.stream.Collectors;
 
 @Component
 public class JwtGrantedAuthoritiesConverter implements Converter<Jwt, Collection<GrantedAuthority>> {
+
+    private static final Logger log = LoggerFactory.getLogger(JwtGrantedAuthoritiesConverter.class);
 
     @Override
     public Collection<GrantedAuthority> convert(Jwt jwt) {
@@ -28,6 +32,7 @@ public class JwtGrantedAuthoritiesConverter implements Converter<Jwt, Collection
         List<GrantedAuthority> authorities = new ArrayList<>(roles);
 
         authorities.addAll(scopes);
+        log.info("GrantedAuthority list: {}", authorities);
         return authorities;
     }
 }

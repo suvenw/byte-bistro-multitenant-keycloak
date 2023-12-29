@@ -5,6 +5,7 @@ import com.nimbusds.jwt.proc.ConfigurableJWTProcessor;
 import com.nimbusds.jwt.proc.DefaultJWTProcessor;
 import com.nimbusds.jwt.proc.JWTClaimsSetAwareJWSKeySelector;
 import com.nimbusds.jwt.proc.JWTProcessor;
+import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
@@ -22,7 +23,6 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 import org.springframework.security.oauth2.server.resource.authentication.JwtIssuerAuthenticationManagerResolver;
 import org.springframework.security.web.SecurityFilterChain;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -67,16 +67,16 @@ public class SecurityConfig {
     }
 
     @Bean
-    JWTProcessor jwtProcessor(JWTClaimsSetAwareJWSKeySelector keySelector) {
+    JWTProcessor<SecurityContext> jwtProcessor(JWTClaimsSetAwareJWSKeySelector<SecurityContext> keySelector) {
         // this is executed
-        log.info("keySelector: {}", keySelector);
+        log.info("keySelector: {}", keySelector.toString());
         ConfigurableJWTProcessor<SecurityContext> jwtProcessor = new DefaultJWTProcessor<>();
         jwtProcessor.setJWTClaimsSetAwareJWSKeySelector(keySelector);
         return jwtProcessor;
     }
 
     @Bean
-    JwtDecoder jwtDecoder(JWTProcessor jwtProcessor, OAuth2TokenValidator<Jwt> jwtValidator) {
+    JwtDecoder jwtDecoder(JWTProcessor<SecurityContext> jwtProcessor, OAuth2TokenValidator<Jwt> jwtValidator) {
         // this is executed
         log.info("jwtProcessor: {}", jwtProcessor.toString());
         NimbusJwtDecoder decoder = new NimbusJwtDecoder(jwtProcessor);
@@ -85,18 +85,18 @@ public class SecurityConfig {
         return decoder;
     }
 
-    private JwtAuthenticationConverter customJwtAuthenticationConverter() {
-
-        JwtAuthenticationConverter converter = new JwtAuthenticationConverter();
-        converter.setJwtGrantedAuthoritiesConverter(jwtGrantedAuthoritiesConverter);
-        return converter;
-    }
-
     private void addManager(Map<String, AuthenticationManager> authenticationManagers, String issuer) {
         log.info("Issuer added to authentication manager: {}", issuer);
         JwtAuthenticationProvider authenticationProvider = new JwtAuthenticationProvider(JwtDecoders.fromIssuerLocation(issuer));
         authenticationProvider.setJwtAuthenticationConverter(customJwtAuthenticationConverter());
         authenticationManagers.put(issuer, authenticationProvider::authenticate);
+    }
+
+    private JwtAuthenticationConverter customJwtAuthenticationConverter() {
+
+        JwtAuthenticationConverter converter = new JwtAuthenticationConverter();
+        converter.setJwtGrantedAuthoritiesConverter(jwtGrantedAuthoritiesConverter);
+        return converter;
     }
 
 }

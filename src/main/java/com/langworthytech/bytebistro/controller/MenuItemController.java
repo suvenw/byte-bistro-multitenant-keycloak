@@ -35,7 +35,7 @@ public class MenuItemController {
     }
 
     @GetMapping
-    @PostAuthorize("returnObject.username = authentication.token.subject")
+//    @PostAuthorize("returnObject.username = authentication.token.subject")
     public List<MenuItem> getMenuItems(@AuthenticationPrincipal Jwt token) {
 
         System.out.println("Subject: " + token.getSubject());

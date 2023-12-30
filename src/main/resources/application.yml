@@ -1,21 +1,11 @@
 
 spring:
-#  security:
-#    oauth2:
-#      resourceserver:
-#        jwt:
-#          issuer-uri: "http://localhost:8080/realms/code-and-coffee"
   jpa:
-    #    defer-datasource-initialization: true
     properties:
       hibernate:
         hbm2ddl:
-          #          auto: none
           auto: update
-#          auto: create-drop
         show_sql: true
-  #        id:
-  #          db_structure_naming_strategy: legacy
   datasource:
     url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5435}/${DB_NAME:byte_bistro}?currentSchema=${DMS_DB_SCHEMA:common}&useSSL=false
     driverClassName: org.postgresql.Driver

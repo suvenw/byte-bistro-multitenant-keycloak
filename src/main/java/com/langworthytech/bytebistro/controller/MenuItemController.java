@@ -24,42 +24,15 @@ public class MenuItemController {
         this.menuItemRepository = menuItemRepository;
     }
 
-    @GetMapping("/admin")
-    public List<MenuItem> getAdminMenuItems() {
-        return Arrays.asList(
-                new MenuItem(1L, "Admin Denver Omelet", "Add white or wheat toast.", 12.99),
-                new MenuItem(2L, "Admin Side of White Gravy", "Cooked in Grandma's kitchen.", 2.99),
-                new MenuItem(3L, "Admin Biscuits and Gravy", "Baked fresh daily!", 5.99),
-                new MenuItem(4L, "Admin Grand Slam breakfast", "For the hungry guys.", 20.99)
-        );
-    }
-
     @GetMapping
-//    @PostAuthorize("returnObject.username = authentication.token.subject")
-    public List<MenuItem> getMenuItems(@AuthenticationPrincipal Jwt token) {
-
-        System.out.println("Subject: " + token.getSubject());
-        System.out.println("Claims: " + token.getClaims().toString());
-        System.out.println("Issuer: " + token.getIssuer());
-        System.out.println("Id: " + token.getId());
-
-        return Arrays.asList(
-                new MenuItem(1L, "Denver Omelet", "Add white or wheat toast.", 12.99),
-                new MenuItem(2L, "Side of White Gravy", "Cooked in Grandma's kitchen.", 2.99),
-                new MenuItem(3L, "Biscuits and Gravy", "Baked fresh daily!", 5.99),
-                new MenuItem(4L, "Grand Slam breakfast", "For the hungry guys.", 20.99)
-        );
+    @PreAuthorize("hasAuthority('SCOPE_kitchen.admin') || hasRole('read-menu')")
+    public List<MenuItem> getMenuItems() {
+        return menuItemRepository.findAll();
     }
 
     @PostMapping
     @PreAuthorize("hasAuthority('SCOPE_kitchen.admin') || hasRole('create-menu')")
-//    @PostAuthorize("returnObject.username = authentication.token.subject")
     public ResponseEntity<HttpStatus> createMenuItem(@AuthenticationPrincipal Jwt token, @RequestBody MenuItem menuItem) {
-
-        System.out.println("Subject: " + token.getSubject());
-        System.out.println("Claims: " + token.getClaims().toString());
-        System.out.println("Issuer: " + token.getIssuer());
-        System.out.println("Id: " + token.getId());
 
         menuItemRepository.save(menuItem);
         return ResponseEntity.status(HttpStatus.CREATED).build();

@@ -22,5 +22,4 @@ public final class TenantContext {
     public static void clear() {
         tenantId.remove();
     }
-
 }

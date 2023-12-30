@@ -33,7 +33,6 @@ public class MenuItemController {
     @PostMapping
     @PreAuthorize("hasAuthority('SCOPE_kitchen.admin') || hasRole('create-menu')")
     public ResponseEntity<HttpStatus> createMenuItem(@AuthenticationPrincipal Jwt token, @RequestBody MenuItem menuItem) {
-
         menuItemRepository.save(menuItem);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }

@@ -14,5 +14,4 @@ public interface TenantRepository extends CrudRepository<Tenant, String> {
 
     @Query("SELECT t.issuer FROM Tenant t")
     List<String> findAllIssuers();
-
 }

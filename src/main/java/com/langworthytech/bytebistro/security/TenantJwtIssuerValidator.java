@@ -26,7 +26,6 @@ public class TenantJwtIssuerValidator implements OAuth2TokenValidator<Jwt> {
 
     @Override
     public OAuth2TokenValidatorResult validate(Jwt token) {
-        log.info("validate method called");
         return validators.computeIfAbsent(toTenant(token), this::fromTenant).validate(token);
     }
 
@@ -35,7 +34,6 @@ public class TenantJwtIssuerValidator implements OAuth2TokenValidator<Jwt> {
     }
 
     private JwtIssuerValidator fromTenant(String issuer) {
-        log.info("fromTenant method in TenantJwtIssuerValidator - issuer: {}", issuer);
 
         int lastIndex = issuer.lastIndexOf("/");
         String tenantId = issuer.substring(lastIndex + 1);

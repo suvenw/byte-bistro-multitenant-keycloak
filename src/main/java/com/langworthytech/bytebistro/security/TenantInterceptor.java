@@ -22,8 +22,9 @@ public class TenantInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+
         String token = request.getHeader("Authorization").substring(7);
-        log.info("Authorization Token: {}", token);
+
         Jwt jwt = jwtDecoder.decode(token);
         String issuer = jwt.getIssuer().toString();
         log.info("Issuer: {}", issuer);

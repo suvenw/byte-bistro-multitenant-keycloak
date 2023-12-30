@@ -24,7 +24,6 @@ public class TenantIdentifierResolver implements CurrentTenantIdentifierResolver
         log.info("Current tenantId found in context: {}", TenantContext.getTenantId());
 
         return Objects.requireNonNullElse(TenantContext.getTenantId(), "common");
-//        return Objects.requireNonNullElse(tenentId, "common");
     }
 
     @Override

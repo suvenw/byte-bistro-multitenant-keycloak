@@ -2,7 +2,9 @@ package com.langworthytech.bytebistro.security;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
+@Component
 public final class TenantContext {
 
     private static final Logger log = LoggerFactory.getLogger(TenantContext.class);
@@ -20,5 +22,4 @@ public final class TenantContext {
     public static void clear() {
         tenantId.remove();
     }
-
 }

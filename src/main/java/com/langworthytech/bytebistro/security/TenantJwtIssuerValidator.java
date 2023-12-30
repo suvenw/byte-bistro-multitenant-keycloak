@@ -40,9 +40,6 @@ public class TenantJwtIssuerValidator implements OAuth2TokenValidator<Jwt> {
         int lastIndex = issuer.lastIndexOf("/");
         String tenantId = issuer.substring(lastIndex + 1);
 
-        TenantContext.setTenantId(tenantId);
-        log.info("Current tenantId in fromTenant method: {}", TenantContext.getTenantId());
-
         Tenant tenant = tenants.findByTenantId(tenantId).orElseThrow(() ->
                 new IllegalArgumentException("Unknown tenant!"));
         return new JwtIssuerValidator(tenant.getIssuer());

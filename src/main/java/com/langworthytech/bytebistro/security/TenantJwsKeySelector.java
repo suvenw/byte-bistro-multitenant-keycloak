@@ -48,14 +48,6 @@ public class TenantJwsKeySelector implements JWTClaimsSetAwareJWSKeySelector<Sec
         int lastIndex = issuer.lastIndexOf("/");
         String tenantId = issuer.substring(lastIndex + 1);
 
-//        return Optional.ofNullable(trustedIssuerRepository.findById(tenantId))
-//                .map(t -> {
-//                    log.info("value of t: {}", t);
-//                    return t;
-//                })
-//                .map(this::fromUri)
-//                .orElseThrow(() -> new IllegalArgumentException("unknown tenant"));
-
         log.info("fromTenant method in TenantJwsKeySelector - tenantId: {}", tenantId);
 
         Tenant tenant = tenantRepository.findByTenantId(tenantId).orElseThrow(() ->

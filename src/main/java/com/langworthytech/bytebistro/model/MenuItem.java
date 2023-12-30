@@ -22,6 +22,9 @@ public class MenuItem {
 
     private Double price;
 
+    public MenuItem() {
+    }
+
     public MenuItem(Long id, String name, String description, Double price) {
         this.id = id;
         this.name = name;

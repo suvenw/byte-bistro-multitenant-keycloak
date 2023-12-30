@@ -1,5 +1,6 @@
 package com.langworthytech.bytebistro.security;
 
+import com.langworthytech.bytebistro.repository.TenantRepository;
 import com.nimbusds.jose.proc.SecurityContext;
 import com.nimbusds.jwt.proc.ConfigurableJWTProcessor;
 import com.nimbusds.jwt.proc.DefaultJWTProcessor;
@@ -33,13 +34,11 @@ public class SecurityConfig {
 
     private static final Logger log = LoggerFactory.getLogger(SecurityConfig.class);
     private final JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter;
-    private final TrustedIssuerRepository trustedIssuerRepository;
-    private final TenantContext tenantContext;
+    private final TenantRepository tenantRepository;
 
-    public SecurityConfig(JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter, TrustedIssuerRepository trustedIssuerRepository, TenantContext tenantContext) {
+    public SecurityConfig(JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter, TenantRepository tenantRepository) {
         this.jwtGrantedAuthoritiesConverter = jwtGrantedAuthoritiesConverter;
-        this.trustedIssuerRepository = trustedIssuerRepository;
-        this.tenantContext = tenantContext;
+        this.tenantRepository = tenantRepository;
     }
 
     @Bean
@@ -50,7 +49,7 @@ public class SecurityConfig {
         JwtIssuerAuthenticationManagerResolver authenticationManagerResolver =
                 new JwtIssuerAuthenticationManagerResolver(authenticationManagers::get);
 
-        List<String> issuers = trustedIssuerRepository.findAllIssuers().stream().toList();
+        List<String> issuers = tenantRepository.findAllIssuers().stream().toList();
         issuers.forEach(issuer -> addManager(authenticationManagers, issuer));
 
         httpSecurity.authorizeHttpRequests(authorize ->

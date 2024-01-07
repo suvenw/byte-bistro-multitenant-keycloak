@@ -1,0 +1,37 @@
+version: "3"
+
+services:
+  postgres-db:
+    image: postgres:15
+    container_name: postgres-keycloak-db
+    ports:
+      - 5432:5432
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: keycloak
+      POSTGRES_USER: keycloak
+      POSTGRES_PASSWORD: password
+
+  keycloak:
+    image: bitnami/keycloak:22.0.5
+    container_name: keycloak
+    ports:
+      - 8080:8080
+    depends_on:
+      - postgres-db
+    environment:
+      KEYCLOAK_DATABASE_VENDOR: "${DB_VENDOR:-postgresql}"
+      KEYCLOAK_DATABASE_HOST: "${DB_HOST:-postgres-db}"
+      KEYCLOAK_DATABASE_PORT: "${DB_PORT:-5432}"
+      KEYCLOAK_DATABASE_NAME: "${DB_ADDR:-keycloak}"
+      KEYCLOAK_DATABASE_USER: "${DB_USER:-keycloak}"
+      KEYCLOAK_DATABASE_PASSWORD: "${DB_PASSWORD:-password}"
+    volumes:
+      - keycloak_data:/opt/jboss/keycloak/standalone/data
+      - keycloak_config:/opt/jboss/keycloak/standalone/configuration
+
+volumes:
+  pg_data:
+  keycloak_data:
+  keycloak_config:

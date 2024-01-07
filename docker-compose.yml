@@ -31,7 +31,6 @@ services:
       - keycloak_data:/opt/jboss/keycloak/standalone/data
       - keycloak_config:/opt/jboss/keycloak/standalone/configuration
 
-
 volumes:
   pg_data:
   keycloak_data:
